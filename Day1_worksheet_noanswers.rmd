@@ -1,0 +1,193 @@
+---
+title: "GPDI 517 Reproducible Scientific Analysis with R"
+author: "by Tugba Ozturk"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    
+---
+
+## Agenda:
+
+- Introduction to R: numbers, characters, vectors and data frames
+- Reading and writing data files with R
+- Data analysis with *dplyr* and *data.table* packages
+- Data visualization with *ggplot* and *plotly* packages
+
+## Introduction to R:
+
+Let's start with using R as a calculator to perform the following calculation: 
+$mynumber = -2.5 \frac{2 \pi \sqrt{15}}{1.4^5} + 18.8$
+
+```{r firstcalculation} 
+ #does the calculation on the right and saves it as a variable named mynumber
+ #prints mynumber's value on the screen with 2 digits after the decimal!
+```
+
+Create two variables named `a` (a numeric variable) and `b` (a character variable). Does R assume numbers to be integers or doubles (i.e. fractional value, float variable)? How can we create an integer numeric value? Can we change an integer variable to be a character variable?
+
+```{r notes-on-numbers-and-characters} 
+#create a
+#create b
+#set a as an "integer"
+#set a as a "character"
+
+```
+
+**Vectors:** 
+
+- are dimensionless (but the length of a vector = total # of elements);
+- can hold data of the same type (character or numeric, not both!);
+- can be created using the `c()` function.
+
+Create a vector variable named `fruits` that stores the followin: apple, kiwi, pear, orange, blueberry. Create another vector variable, name it as `numbers` and assign 7 numeric values as its components.
+
+```{r vector1} 
+
+
+```
+
+Take a look at the following code chunk and fix it:
+
+```{r vectorplot}
+
+?sin # to see documentation…
+ # fix the problem...
+#plotting
+
+
+#par(mar=c(5,5,5,5)) 
+#plot(x,sin(r),type="b", cex.lab=1.4, col="dark red", pch=1, lty=1, ylim=c(-1,1), xlab=expression(paste(theta),"in degrees"),ylab=expression(paste("sin(",theta,")")))#try out!
+
+```
+
+Please visit [this page](http://www.sthda.com/english/wiki/r-plot-pch-symbols-the-different-point-shapes-available-in-r) and  [this other page](http://www.sthda.com/english/wiki/line-types-in-r-lty) to learn more about different `pch` and `lty` options. You can type `source("http://research.stowers-institute.org/efg/R/Color/Chart/ColorChart.R")` on your console to download a PDF file named `ColorChart.pdf` which shows you a list of colors and their names.
+
+
+Going back to the vectors... You can combine two vectors regardless of their length (the number of the components). You can apply mathematical operations on the vectors. You can subset them. In the next code chunk, you will find two vectors to combine and manipulate!
+
+```{r vector2} 
+vec1 <- seq(-10,4,2)
+vec2 <- c(-2,5,3.2,2.7,-8.1)
+
+
+
+
+```
+
+
+**Data frames:**
+
+- can be thought as list of vectors of equal length;			
+- are 2 dimensional: dim(), nrow(), ncol();
+- can hold different data types;
+- can be created using the `data.frame()` function.
+
+```{r dataframe1} 
+ions <- c("Na", "Cl")
+protons <- c(11,17)
+electrons <- c(10,18)
+
+#combine these three vectors and create a data frame having 2 rows and 2 columns (ion,np,ne), name the data frame as myIons
+
+
+#use rbind to add a new row to the data frame
+
+
+
+#use cbing to add a new column to the data frame (for example; charge)
+
+
+# delete one of the columns
+
+
+#explain what the following lines print...
+#myIons[1,2]
+#myIons[1,]
+#myIons[,1]
+#myIons[c(2,1), c(3,1)]
+
+```
+
+
+Another exercise:
+
+1. Create a data frame named *citydata* including the following:
+
+- a column of city: Istanbul, Montreal, NewYork, Paris, Sydney. 
+- another column of population: 15.1, 4.1, 8.5, 2.3,5.0. 
+
+2. Create a vector that has only first three letter of each city. Name it as *X*. Use the `substr` function.
+
+3. Create another vector that has **S** if the city’s population is less than  5 million (including 5 million) and **B** otherwise. Name it as *Y*.
+
+4. Concatenate *X* and *Y* vectors using the `paste` function. Name it *Z*. For Istanbul, it should look like this: **Ist-B**. Add this vector as the third column named label to the *citydata* data frame.
+
+```{r dataframe2}
+
+```
+
+
+## Reading and writing data files:
+
+First, let's figure out how to write the `myIons` data frame (we have created earlier) to a file. 
+
+```{r datawrite}
+#write it as a table
+#write it as a csv
+#library("WriteXLS") #also library("xlsx"), but it does not work on Linux!
+#WriteXLS(dataframename,"filename.xls")
+
+```
+
+`readr` library has the following important functions:
+
+- read_csv(): comma separated (CSV) files;
+- read_tsv(): tab separated files;
+- read_delim(): general delimited files;
+- read_table(): tabular files where columns are separated by white-space;
+- read_log(): web log files.
+
+Note that `readr` is especially efficient to deal with big data. It can help you diagnose problems while reading data: `x <- read_csv("file.csv"); problems(x)`. It also has super handy arguments! Here is a brief list of those:
+
+- escape_backslash: set it to TRUE if the file is using backslashes to escape special characters.
+- col_names: set it to TRUE, FALSE or a vector with the colnames you want.
+- cols_only(): if you want to subset some of the columns.
+- col_skip(): to skip a column.
+- skip: to skip a certain number of lines before reading the data.
+- comment: a string used to identify comments. Any text after the comment characters will be silently ignored.
+- progress: set it to `TRUE` if you prefer to see a progress bar while reading the data file (which takes more than 5 seconds to read)!
+
+Check out the [pdftools](https://ropensci.org/blog/2016/03/01/pdftools-and-jeroen/) library to read data from a pdf file.
+
+Now, visit [the page](https://github.com/tugbateaches/Data-Viz/blob/master/wildtype.dat). Click on "raw" and save it on your computer as `wildtype.dat` inside the folder you set as your **working directory**. Then, read it as a data frame using the following chunk:
+
+```{r dataread}
+
+
+```
+
+
+## Data wrangling:
+
+Data wrangling = manipulating/modifying/cleaning/mining/subsetting/handling data.
+
+We will use `dplyr` for data wrangling. Its important functions are as follows:
+
+1. filter – to filter the data based on a condition;
+2. select – to select columns of your choice from a data set;
+3. arrange – to arrange data set values on ascending or descending order;
+4. mutate – to create new variables from existing variables;
+5. summarise (with group_by) – to perform analysis by commonly used functions such as min, max and mean.
+
+For the following exercise, type `mtcars` or `head(mtcars)` to see the data frame we will use. We will first save a local copy of this data frame and then filter it by the `wt` column. Which rows have values higher than 3.5 in the `wt` column? How would you filter the data frame in a way that you have the car models with a wt value higher than 4.0 and a carb value between 2 and 5? Can we select only three of its columns: `gear`, `hp`, `wt`. 
+
+
+```{r dplyr-mtcars}
+
+#install.packages("dplyr") #installs the package
+#library("dplyr") #loads the package in your workspace
+
+
+```
